@@ -16,6 +16,8 @@ import org.junit.rules.ExpectedException;
 import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
+import br.ce.wcaquino.exceptions.FilmeSemEstoqueException;
+import br.ce.wcaquino.exceptions.LocadoraException;
 import br.ce.wcaquino.utils.DataUtils;
 
 public class LocacaoServiceTest {
@@ -42,7 +44,7 @@ public class LocacaoServiceTest {
 		error.checkThat(isMesmaData(locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), is(true));
 	}
 	
-	@Test(expected = Exception.class)
+	@Test(expected = FilmeSemEstoqueException.class)
 	public void filmeSemEstoque() throws Exception {
 		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Usuario 1");
@@ -51,27 +53,28 @@ public class LocacaoServiceTest {
 	}
 	
 	@Test
-	public void filmeSemEstoque2() {
+	public void testUsuarioVazio() throws FilmeSemEstoqueException {
 		LocacaoService service = new LocacaoService();
-		Usuario usuario = new Usuario("Usuario 1");
 		Filme filme = new Filme("Filme 1", 0, 5.0);
+		
 		try {
-			service.alugarFilme(usuario, filme);
-			Assert.fail("Deveria ter lançado uma exceção");
-		} catch (Exception e) {
-			assertThat(e.getMessage(), is("Filme sem estoque!"));
+			service.alugarFilme(null, filme);
+			Assert.fail();
+		} catch (LocadoraException e) {
+			assertThat(e.getMessage(), is("Usuário não informado!"));
+			
 		}
 	}
 	
 	@Test
-	public void filmeSemEstoque3() throws Exception {
+	public void testFilmeVazio() throws LocadoraException, FilmeSemEstoqueException {
 		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Usuario 1");
-		Filme filme = new Filme("Filme 1", 0, 5.0);
-		exception.expect(Exception.class);
-		exception.expectMessage("Filme sem estoque!");
-
-		service.alugarFilme(usuario, filme);
+		
+		exception.expect(LocadoraException.class);
+		exception.expectMessage("Filme não informado!");
+		service.alugarFilme(usuario, null);
 	}
+	
 	
 }
