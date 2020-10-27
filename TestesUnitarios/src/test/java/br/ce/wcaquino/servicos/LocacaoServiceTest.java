@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -42,6 +43,9 @@ public class LocacaoServiceTest {
 	
 	@Test
 	public void deveAlugarFilme() throws Exception {
+		
+		Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
+		
 		//cenario
 		Usuario usuario = new Usuario("Usuario 1");
 		List<Filme> filmes = new ArrayList();	
@@ -171,6 +175,9 @@ public class LocacaoServiceTest {
 	
 	@Test
 	public void naoDeveDevolverFilmeNoDomingo() throws Exception {
+		
+		Assume.assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
+		
 		Usuario usuario = new Usuario("Renato");
 		
 		List<Filme> filmes = new ArrayList();
