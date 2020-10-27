@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 
 import java.beans.Transient;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -168,7 +169,19 @@ public class LocacaoServiceTest {
 		assertThat(locacao.getValor(), is(14.0));
 	}
 	
-	
+	@Test
+	public void naoDeveDevolverFilmeNoDomingo() throws Exception {
+		Usuario usuario = new Usuario("Renato");
+		
+		List<Filme> filmes = new ArrayList();
+		filmes.add(new Filme("Filme 1", 2, 4.0));
+		
+		Locacao locacao = service.alugarFilme(usuario, filmes);
+		
+	   boolean isSegundaFeira = DataUtils.verificarDiaSemana(locacao.getDataRetorno(), Calendar.MONDAY);
+		
+	   assertTrue(isSegundaFeira);
+	}
 	
 	
 }
