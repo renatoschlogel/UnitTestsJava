@@ -25,13 +25,20 @@ public class LocacaoService {
 		
 		Double valorLocacao = 0.0;
 		
-		for (Filme filme : filmes) {
+		
+		for (int index = 0; index < filmes.size(); index++) {
+			
+			Filme filme = filmes.get(index);
+			
 			if (filme.getEstoque() == 0) {
 				throw new FilmeSemEstoqueException();
 			}
-			valorLocacao+= filme.getPrecoLocacao();
+			
+			Double precoLocacao = valorLiquidoLocacaoFilme(filme, index + 1);
+
+			valorLocacao+= precoLocacao;
 		}
-		
+	
 		
 		Locacao locacao = new Locacao();
 		locacao.setFilmes(filmes);
@@ -48,6 +55,17 @@ public class LocacaoService {
 		//TODO adicionar método para salvar
 		
 		return locacao;
+	}
+
+	private Double valorLiquidoLocacaoFilme(Filme filme, int numeroFilme) {
+		switch (numeroFilme) {
+		case 3:	return filme.getPrecoLocacao() * 0.75;
+		case 4: return filme.getPrecoLocacao() * 0.50;
+		case 5: return filme.getPrecoLocacao() * 0.25;
+		case 6:	return 0.0;
+		default: return filme.getPrecoLocacao();
+		}
+				
 	}
 
 }
