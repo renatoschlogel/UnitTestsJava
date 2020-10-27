@@ -78,11 +78,28 @@ public class LocacaoServiceTest {
 	
 	@Test
 	public void testFilmeVazio() throws LocadoraException, FilmeSemEstoqueException {
+		List<Filme> filmes = new ArrayList();
+		Filme filme = new Filme("Filme 1", 0, 5.0);
+		filmes.add(filme);
+		try {
+			service.alugarFilme(null, filmes);
+			Assert.fail();
+		} catch (LocadoraException e) {
+			assertThat(e.getMessage(), is("Usuário não informado!"));
+			
+		}
+	}
+	
+	@Test
+	public void testNaoDeveDarDesconto() throws LocadoraException, FilmeSemEstoqueException {
+		List<Filme> filmes = new ArrayList();
 		Usuario usuario = new Usuario("Usuario 1");
+		Filme filme = new Filme("Filme 1", 0, 5.0);
+		filmes.add(filme);
+		Locacao alugarFilme = service.alugarFilme(usuario, filmes);
 		
-		exception.expect(LocadoraException.class);
-		exception.expectMessage("Nenhum filme foi informado!");
-		service.alugarFilme(usuario, null);
+		
+		
 	}
 	
 	
