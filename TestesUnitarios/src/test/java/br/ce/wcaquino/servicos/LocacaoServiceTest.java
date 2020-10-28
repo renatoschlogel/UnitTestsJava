@@ -24,6 +24,8 @@ import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
 import br.ce.wcaquino.exceptions.FilmeSemEstoqueException;
 import br.ce.wcaquino.exceptions.LocadoraException;
+import br.ce.wcaquino.matchers.DiaSemanaMatecher;
+import br.ce.wcaquino.matchers.MatchersProprios;
 import br.ce.wcaquino.utils.DataUtils;
 
 public class LocacaoServiceTest {
@@ -98,19 +100,20 @@ public class LocacaoServiceTest {
 
 	@Test
 	public void naoDeveDevolverFilmeNoDomingo() throws Exception {
-		
+
 		Assume.assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
-		
+
 		Usuario usuario = new Usuario("Renato");
-		
+
 		List<Filme> filmes = new ArrayList();
 		filmes.add(new Filme("Filme 1", 2, 4.0));
-		
+
 		Locacao locacao = service.alugarFilme(usuario, filmes);
+
+		assertThat(locacao.getDataRetorno(), new DiaSemanaMatecher(Calendar.MONDAY));
+		assertThat(locacao.getDataRetorno(), MatchersProprios.caiEmUmaSegundaFeira());
 		
-	   boolean isSegundaFeira = DataUtils.verificarDiaSemana(locacao.getDataRetorno(), Calendar.MONDAY);
-		
-	   assertTrue(isSegundaFeira);
+
 	}
 	
 	
