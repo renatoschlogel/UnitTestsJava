@@ -95,18 +95,7 @@ public class LocacaoServiceTest {
 			
 		}
 	}
-	
-//	@Test
-//	public void naoDeveDarDesconto() throws LocadoraException, FilmeSemEstoqueException {
-//		List<Filme> filmes = new ArrayList();
-//		Usuario usuario = new Usuario("Usuario 1");
-//		Filme filme = new Filme("Filme 1", 0, 5.0);
-//		filmes.add(filme);
-//		Locacao alugarFilme = service.alugarFilme(usuario, filmes);
-//				
-//		
-//	}
-	
+
 	@Test
 	public void devePagar75PercetNoFilme3() throws FilmeSemEstoqueException, LocadoraException {
 		Usuario usuario = new Usuario("Renato");
