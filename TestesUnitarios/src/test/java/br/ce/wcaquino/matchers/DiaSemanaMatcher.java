@@ -9,11 +9,11 @@ import org.hamcrest.TypeSafeMatcher;
 
 import br.ce.wcaquino.utils.DataUtils;
 
-public class DiaSemanaMatecher extends TypeSafeMatcher<Date> {
+public class DiaSemanaMatcher extends TypeSafeMatcher<Date> {
 
 	private Integer diaSemana; 
 	
-	public DiaSemanaMatecher(Integer diaSemana) {
+	public DiaSemanaMatcher(Integer diaSemana) {
 		this.diaSemana = diaSemana;
 	}
 	
