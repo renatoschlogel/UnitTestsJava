@@ -1,7 +1,8 @@
 package br.ce.wcaquino.servicos;
 
+import static br.ce.wcaquino.builders.FilmeBuilder.umFilme;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -42,13 +43,13 @@ public class CalculoValorLocacaoTest {
 	@Parameters(name="Teste {index} = {2}")
 	public static Collection<Object[]> getParametros() {
 		
-		Filme filme1 = new Filme("Filme 1", 2, 4.0);
-		Filme filme2 = new Filme("Filme 2", 2, 4.0);
-		Filme filme3 = new Filme("Filme 3", 2, 4.0);
-		Filme filme4 = new Filme("Filme 4", 2, 4.0);
-		Filme filme5 = new Filme("Filme 5", 2, 4.0);
-		Filme filme6 = new Filme("Filme 6", 2, 4.0);
-		Filme filme7 = new Filme("Filme 7", 2, 4.0);
+		Filme filme1 = umFilme().agora();
+		Filme filme2 = umFilme().agora();
+		Filme filme3 = umFilme().agora();
+		Filme filme4 = umFilme().agora();
+		Filme filme5 = umFilme().agora();
+		Filme filme6 = umFilme().agora();
+		Filme filme7 = umFilme().agora();
 		
 		return Arrays.asList(new Object[][] {
 			{Arrays.asList(filme1, filme2, filme3), 11.0, "2 filmes: sem desconto"},
