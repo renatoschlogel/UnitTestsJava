@@ -1,7 +1,13 @@
 package br.ce.wcaquino.entidades;
 
+import buildermaster.BuilderMaster;
+
 public class Filme {
 
+	
+	public static void main(String[] args) {
+		new BuilderMaster().gerarCodigoClasse(Locacao.class);
+	}
 	private String nome;
 	private Integer estoque;
 	private Double precoLocacao;  
