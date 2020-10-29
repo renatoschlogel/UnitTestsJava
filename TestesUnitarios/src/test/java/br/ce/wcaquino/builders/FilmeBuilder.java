@@ -24,7 +24,7 @@ public class FilmeBuilder {
 		FilmeBuilder filmeBuilder = new FilmeBuilder();
 		filmeBuilder.filme = new Filme();
 		filmeBuilder.filme.setNome("Filme 1");
-		filmeBuilder.filme.setEstoque(2);
+		filmeBuilder.filme.setEstoque(0);
 		filmeBuilder.filme.setPrecoLocacao(4.0);
 		
 		return filmeBuilder;
