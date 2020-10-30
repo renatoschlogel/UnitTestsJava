@@ -11,11 +11,13 @@ import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
 import br.ce.wcaquino.exceptions.FilmeSemEstoqueException;
 import br.ce.wcaquino.exceptions.LocadoraException;
+import br.ce.wcaquino.utils.DataUtils;
 
 public class LocacaoService {
 	
 	private LocacaoDAO locacaoDAO;
 	private SPCService spcService;
+	private EmailService emailService;
 	
 	public LocacaoService() {
 	}
@@ -26,6 +28,10 @@ public class LocacaoService {
 	
 	public void setSPCService(SPCService spcService) {
 		this.spcService = spcService;
+	}
+	
+	public void setEmailService(EmailService emailService) {
+		this.emailService = emailService;
 	}
 	
 
@@ -78,7 +84,15 @@ public class LocacaoService {
 		
 		return locacao;
 	}
-
+	
+	public void notificarAtrasos() {
+		List<Locacao> locacoes = locacaoDAO.buscarLocacoesPendentes();
+		
+		for (Locacao locacao : locacoes) {
+			emailService.notificarUsuario(locacao.getUsuario());
+		}
+	}
+	
 	private Double valorLiquidoLocacaoFilme(Filme filme, int numeroFilme) {
 		switch (numeroFilme) {
 		case 3:	return filme.getPrecoLocacao() * 0.75;
