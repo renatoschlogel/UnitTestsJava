@@ -15,7 +15,20 @@ import br.ce.wcaquino.exceptions.LocadoraException;
 public class LocacaoService {
 	
 	private LocacaoDAO locacaoDAO;
+	private SPCService spcService;
 	
+	public LocacaoService() {
+	}
+	
+	public void setLocacaoDAO(LocacaoDAO locacaoDAO) {
+		this.locacaoDAO = locacaoDAO;
+	}
+	
+	public void setSPCService(SPCService spcService) {
+		this.spcService = spcService;
+	}
+	
+
 	public Locacao alugarFilme(Usuario usuario, List<Filme> filmes) throws LocadoraException, FilmeSemEstoqueException{
 		
 		if (usuario == null) {
@@ -25,6 +38,11 @@ public class LocacaoService {
 		if (filmes == null || filmes.isEmpty()) {
 			throw new LocadoraException("Nenhum filme foi informado!");
 		}
+		
+		if (spcService.possuiNegativacao(usuario)) {
+			throw new LocadoraException("Usuário Negativado!");
+		}
+		
 		
 		Double valorLocacao = 0.0;
 		
