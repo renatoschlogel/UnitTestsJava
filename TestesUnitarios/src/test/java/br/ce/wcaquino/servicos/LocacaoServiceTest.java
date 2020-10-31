@@ -2,9 +2,10 @@ package br.ce.wcaquino.servicos;
 
 import static br.ce.wcaquino.builders.FilmeBuilder.umFilme;
 import static br.ce.wcaquino.builders.FilmeBuilder.umFilmeSemEstoque;
+import static br.ce.wcaquino.builders.LocacaoBuilder.umaLocacao;
 import static br.ce.wcaquino.builders.UsuarioBuilder.umUsuario;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +23,6 @@ import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 
-import br.ce.wcaquino.builders.LocacaoBuilder;
 import br.ce.wcaquino.builders.UsuarioBuilder;
 import br.ce.wcaquino.daos.LocacaoDAO;
 import br.ce.wcaquino.entidades.Filme;
@@ -156,18 +156,20 @@ public class LocacaoServiceTest {
 	public void deveEnviarEmailParaLocacoesAtrasadas() throws Exception {
 		
 		Usuario usuario = umUsuario().agora();
+		Usuario usuarioEmDia = umUsuario().comNome("Usuario em dia").agora();
 	
-		List<Locacao> locacoes = Arrays.asList(LocacaoBuilder.umLocacao()
-															 .comUsuario(usuario)
-				                                             .comDataLocacao(DataUtils.adicionarDias(new Date(), -2))
-				                                             .agora());
+		List<Locacao> locacoes = Arrays.asList(umaLocacao().comUsuario(usuario)
+				                                           .comDataLocacao(DataUtils.adicionarDias(new Date(), -2))
+				                                           .agora(),
+				                               umaLocacao().comUsuario(usuarioEmDia)
+				                                           .comDataLocacao(DataUtils.adicionarDias(new Date(), 1))
+				                                           .agora()       
+				                                             );
 		Mockito.when(locacaoDAO.buscarLocacoesPendentes()).thenReturn(locacoes);
 		
 		service.notificarAtrasos();
 
 		Mockito.verify(emailService).notificarUsuario(usuario);
 	}
-	
-	
 	
 }
