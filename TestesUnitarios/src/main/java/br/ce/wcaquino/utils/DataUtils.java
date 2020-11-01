@@ -7,6 +7,7 @@ import static java.util.Calendar.YEAR;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DataUtils {
 	
@@ -82,4 +83,24 @@ public class DataUtils {
 		calendar.setTime(data);
 		return calendar.get(DAY_OF_WEEK) == diaSemana;
 	}
+	
+
+	public static boolean dataMenorIgual(Date data, Date data2) {
+		data = zerarHoraData(data);
+		data2 = zerarHoraData(data2);
+		return data.compareTo(data2) <= 0;
+	}
+	
+	
+	public static Date zerarHoraData(Date date) {
+	    	if (date == null)
+	            return null;
+	    	Calendar calendar = new GregorianCalendar();
+	        calendar.setTime(date);
+	        calendar.set(Calendar.HOUR_OF_DAY, calendar.getMinimum(Calendar.HOUR_OF_DAY));
+	        calendar.set(Calendar.MINUTE, calendar.getMinimum(Calendar.MINUTE));
+	        calendar.set(Calendar.SECOND, calendar.getMinimum(Calendar.SECOND));
+	        calendar.set(Calendar.MILLISECOND, calendar.getMinimum(Calendar.MILLISECOND));
+	        return calendar.getTime();
+	    }
 }

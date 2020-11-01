@@ -3,6 +3,8 @@ package br.ce.wcaquino.entidades;
 import java.util.Date;
 import java.util.List;
 
+import br.ce.wcaquino.utils.DataUtils;
+
 public class Locacao {
 
 	private Usuario usuario;
@@ -41,6 +43,9 @@ public class Locacao {
 	}
 	public void setFilmes(List<Filme> filmes) {
 		this.filmes = filmes;
+	}
+	public boolean isAtrasada() {
+		return DataUtils.dataMenorIgual(getDataRetorno(), new Date());
 	}
 	
 }

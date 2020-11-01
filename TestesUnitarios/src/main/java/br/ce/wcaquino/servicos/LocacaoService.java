@@ -94,7 +94,9 @@ public class LocacaoService {
 		List<Locacao> locacoes = locacaoDAO.buscarLocacoesPendentes();
 		
 		for (Locacao locacao : locacoes) {
-			emailService.notificarUsuario(locacao.getUsuario());
+			if (locacao.isAtrasada()) {
+				emailService.notificarUsuario(locacao.getUsuario());				
+			}
 		}
 	}
 	
