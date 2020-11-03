@@ -2,8 +2,10 @@ package br.ce.wcaquino.servicos;
 
 import java.math.BigDecimal;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+
 
 public class CalculadoraMockTest {
 
@@ -15,9 +17,7 @@ public class CalculadoraMockTest {
 		
 		Mockito.when(calculadora.somar(Mockito.eq(new BigDecimal(1)), Mockito.any(BigDecimal.class))).thenReturn(new BigDecimal(5));
 		
-		System.out.println(calculadora.somar(new BigDecimal(1), new BigDecimal(10)));
-		
-		
+		Assert.assertEquals(new BigDecimal(5), calculadora.somar(new BigDecimal(1), new BigDecimal(10)));
 		
 	}
 }

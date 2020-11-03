@@ -5,7 +5,7 @@ import static br.ce.wcaquino.builders.FilmeBuilder.umFilmeSemEstoque;
 import static br.ce.wcaquino.builders.LocacaoBuilder.umaLocacao;
 import static br.ce.wcaquino.builders.UsuarioBuilder.umUsuario;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -136,7 +136,7 @@ public class LocacaoServiceTest {
 	}
 	
 	@Test
-	public void naoDeveAlugarFilmeParaNegativadoSPC() throws FilmeSemEstoqueException {
+	public void naoDeveAlugarFilmeParaNegativadoSPC() throws Exception {
 		
 		Usuario usuario = umUsuario().agora();
 		List<Filme> filmes = Arrays.asList(umFilme().agora());
@@ -181,4 +181,17 @@ public class LocacaoServiceTest {
 		Mockito.verifyNoMoreInteractions(emailService);
 	}
 	
+	@Test
+	public void deveTratarErroSPC() throws Exception {
+		
+		Usuario usuario = umUsuario().agora();
+		List<Filme> filmes = Arrays.asList(umFilme().agora());
+		
+		Mockito.when(spcService.possuiNegativacao(usuario)).thenThrow(new Exception("Problemas na Comunicação com SPC"));
+		
+		exception.expect(LocadoraException.class);
+		exception.expectMessage("Problemas na Comunicação com SPC");
+		service.alugarFilme(usuario, filmes);
+		
+	}
 }
