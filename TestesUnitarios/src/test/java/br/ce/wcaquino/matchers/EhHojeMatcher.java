@@ -2,6 +2,8 @@ package br.ce.wcaquino.matchers;
 
 import static br.ce.wcaquino.utils.DataUtils.isMesmaData;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.hamcrest.Description;
@@ -17,8 +19,10 @@ public class EhHojeMatcher extends TypeSafeMatcher<Date>  {
 		this.quatidadeDias = quatidadeDias;
 	}
 
-	public void describeTo(Description arg0) {
-		
+	public void describeTo(Description desc) {
+		Date dataEsperada = DataUtils.obterDataComDiferencaDias(quatidadeDias);
+		DateFormat format = new SimpleDateFormat("dd/MM/YYYY");
+		desc.appendText(format.format(dataEsperada));
 	}
 
 	@Override

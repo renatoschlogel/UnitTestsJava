@@ -4,8 +4,10 @@ import static br.ce.wcaquino.builders.FilmeBuilder.umFilme;
 import static br.ce.wcaquino.builders.FilmeBuilder.umFilmeSemEstoque;
 import static br.ce.wcaquino.builders.LocacaoBuilder.umaLocacao;
 import static br.ce.wcaquino.builders.UsuarioBuilder.umUsuario;
+import static br.ce.wcaquino.matchers.MatchersProprios.ehHoje;
+import static br.ce.wcaquino.matchers.MatchersProprios.ehHojeComDiferencaDias;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +23,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -192,6 +195,24 @@ public class LocacaoServiceTest {
 		exception.expect(LocadoraException.class);
 		exception.expectMessage("Problemas na Comunicação com SPC");
 		service.alugarFilme(usuario, filmes);
+		
+	}
+	
+	@Test
+	public void deveProrrogarUmaLocacao() throws Exception {
+		
+		Locacao locacao = umaLocacao().agora();
+		
+		service.prorrogarLocacao(locacao, 3);
+		
+		ArgumentCaptor<Locacao> argumentCaptor = ArgumentCaptor.forClass(Locacao.class);
+		Mockito.verify(locacaoDAO).salvar(argumentCaptor.capture());
+		Locacao locacaoRetorno = argumentCaptor.getValue();
+		
+		error.checkThat(locacaoRetorno.getValor(), is(12.0));
+		error.checkThat(locacaoRetorno.getDataLocacao(), ehHoje());
+		error.checkThat(locacaoRetorno.getDataRetorno(), ehHojeComDiferencaDias(3));
+		
 		
 	}
 }
