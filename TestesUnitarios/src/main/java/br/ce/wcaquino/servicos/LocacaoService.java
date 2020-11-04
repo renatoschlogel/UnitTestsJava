@@ -44,22 +44,7 @@ public class LocacaoService {
 			throw new LocadoraException("Usuário Negativado!");
 		}
 		
-		Double valorLocacao = 0.0;
-		
-		
-		for (int index = 0; index < filmes.size(); index++) {
-			
-			Filme filme = filmes.get(index);
-			
-			if (filme.getEstoque() == 0) {
-				throw new FilmeSemEstoqueException();
-			}
-			
-			Double precoLocacao = valorLiquidoLocacaoFilme(filme, index + 1);
-
-			valorLocacao+= precoLocacao;
-		}
-	
+		Double valorLocacao = calcularValorTotalLocacao(filmes);
 		
 		Locacao locacao = new Locacao();
 		locacao.setFilmes(filmes);
@@ -81,6 +66,23 @@ public class LocacaoService {
 		locacaoDAO.salvar(locacao);
 		
 		return locacao;
+	}
+
+	private Double calcularValorTotalLocacao(List<Filme> filmes) throws FilmeSemEstoqueException {
+		Double valorLocacao = 0.0;
+		for (int index = 0; index < filmes.size(); index++) {
+			
+			Filme filme = filmes.get(index);
+			
+			if (filme.getEstoque() == 0) {
+				throw new FilmeSemEstoqueException();
+			}
+			
+			Double precoLocacao = valorLiquidoLocacaoFilme(filme, index + 1);
+
+			valorLocacao+= precoLocacao;
+		}
+		return valorLocacao;
 	}
 	
 	public void notificarAtrasos() {

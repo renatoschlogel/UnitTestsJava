@@ -7,7 +7,7 @@ import static br.ce.wcaquino.builders.UsuarioBuilder.umUsuario;
 import static br.ce.wcaquino.matchers.MatchersProprios.ehHoje;
 import static br.ce.wcaquino.matchers.MatchersProprios.ehHojeComDiferencaDias;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,6 +69,7 @@ public class LocacaoServiceTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
+		service = PowerMockito.spy(service);
 	}
 	
 	@Test
@@ -241,5 +242,18 @@ public class LocacaoServiceTest {
 		error.checkThat(locacaoRetorno.getDataRetorno(), ehHojeComDiferencaDias(3));
 		
 		
+	}
+	
+	@Test
+	public void deveAlugarFilmeSemCalcularValor() throws Exception {
+		Usuario usuario = umUsuario().agora();
+		List<Filme> filmes = Arrays.asList(umFilme().agora());
+		
+		PowerMockito.doReturn(1.0).when(service, "calcularValorTotalLocacao", filmes);
+		
+		Locacao locacao = service.alugarFilme(usuario, filmes);
+		
+		assertThat(locacao.getValor(), is(1.0));
+		PowerMockito.verifyPrivate(service).invoke("calcularValorTotalLocacao", filmes);
 	}
 }
